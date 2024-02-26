@@ -6,6 +6,7 @@ import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskModalComponent } from '../task-modal/task-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-list',
@@ -24,7 +25,12 @@ export class TaskListComponent implements OnInit {
     'dueDate',
     'action',
   ];
-  constructor(private taskService: TaskService, private dialog: MatDialog) {}
+
+  constructor(
+    private router: Router,
+    private taskService: TaskService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getTasks();
@@ -75,5 +81,9 @@ export class TaskListComponent implements OnInit {
         console.error('Error fetching task:', error);
       }
     );
+  }
+
+  navigateToTaskDetails(id: number): void {
+    this.router.navigate(['/tasks', id]);
   }
 }
