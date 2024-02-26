@@ -76,7 +76,6 @@ export class TaskModalComponent {
   }
 
   onSubmit(form: FormGroup) {
-    console.log(form);
     if (form.valid) {
       if (form.value.id) {
         this.taskService
@@ -90,7 +89,6 @@ export class TaskModalComponent {
           )
           .subscribe(
             (result: any) => {
-              console.log('Task updated', result);
               this.closeDialog();
             },
             (error) => {
@@ -108,7 +106,6 @@ export class TaskModalComponent {
           )
           .subscribe(
             (result: any) => {
-              console.log('Task created', result);
               this.closeDialog();
             },
             (error) => {
