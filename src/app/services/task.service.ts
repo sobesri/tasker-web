@@ -12,11 +12,11 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
+  getTasks(request?: any): Observable<Task[]> {
+    return this.http.get<Task[]>(this.apiUrl, { params: request });
   }
 
-  getTaskById(id: Task): Observable<any> {
+  getTaskById(id: number): Observable<any> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.get<Task>(url);
   }
@@ -28,11 +28,6 @@ export class TaskService {
   updateTask(id: number, taskData: Task): Observable<any> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.put(url, taskData);
-  }
-
-  removeTask(id: number): Observable<any> {
-    const url = `${this.apiUrl}/${id}/remove`;
-    return this.http.put(url, {});
   }
 
   deleteTask(id: number): Observable<any> {

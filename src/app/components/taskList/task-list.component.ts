@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskModalComponent } from '../task-modal/task-modal.component';
 
 @Component({
   selector: 'app-task-list',
@@ -15,6 +16,7 @@ import { Task } from '../../models/task';
 })
 export class TaskListComponent implements OnInit {
   tasks: any[] = [];
+  searchTerm: string = '';
   displayedColumns: string[] = [
     'id',
     'title',
@@ -22,14 +24,18 @@ export class TaskListComponent implements OnInit {
     'dueDate',
     'action',
   ];
-  constructor(private router: Router, private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.getTasks();
   }
 
+  onSearchChange(event: any) {
+    this.searchTerm = event.target.value;
+  }
+
   getTasks(): void {
-    this.taskService.getTasks().subscribe(
+    this.taskService.getTasks({ searchTerm: this.searchTerm }).subscribe(
       (tasks: Task[]) => {
         this.tasks = tasks;
       },
@@ -40,10 +46,34 @@ export class TaskListComponent implements OnInit {
   }
 
   deleteTask(id: number): void {
-    window.alert('deleteTask is not implemented');
+    if (window.confirm('Are you sure?')) {
+      this.taskService.deleteTask(id).subscribe(
+        () => {
+          this.getTasks();
+        },
+        (error) => {
+          console.error('Error deleting task:', error);
+        }
+      );
+    }
   }
 
-  navigateToTaskDetails(id: number): void {
-    this.router.navigate(['/tasks', id]);
+  addNewTask(): void {
+    const modal = this.dialog.open(TaskModalComponent);
+    modal.afterClosed().subscribe(() => this.getTasks());
+  }
+
+  editTask(id: number): void {
+    this.taskService.getTaskById(id).subscribe(
+      (task: Task) => {
+        const modal = this.dialog.open(TaskModalComponent, {
+          data: task,
+        });
+        modal.afterClosed().subscribe(() => this.getTasks());
+      },
+      (error) => {
+        console.error('Error fetching task:', error);
+      }
+    );
   }
 }

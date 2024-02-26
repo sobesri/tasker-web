@@ -1,16 +1,16 @@
 export class Task {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  deleted: number;
+  deleted?: number;
   dueDate: Date;
 
   constructor(
-    id: number,
     title: string,
     description: string,
-    deleted: number,
-    dueDate: Date
+    dueDate: Date,
+    id?: number,
+    deleted?: number
   ) {
     this.id = id;
     this.title = title;

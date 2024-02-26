@@ -10,3 +10,12 @@ section {
 .button-row .mat-mdc-button-base {
   margin: 8px 8px 8px 0;
 }
+
+.task-table {
+  width: 800px;
+}
+
+.no-data-row {
+  height: 52px;
+  text-align: center;
+}
